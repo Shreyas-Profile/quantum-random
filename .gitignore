@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+.env
+.DS_Store
+data/
+node_modules/
+.next/
+out/
+*.bin
+*.bits

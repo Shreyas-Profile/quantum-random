@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>quantum-random · quantum.shreyas.uk</title>
+<meta name="description" content="A webcam-based quantum random number generator, certified with the NIST SP 800-22 test suite.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+  <div class="eyebrow">Quantum · Random number generator</div>
+  <h1>I turned my laptop webcam into a <span class="accent">quantum random number generator.</span></h1>
+  <p class="lede">
+    The least-significant bits of each pixel in a webcam frame carry real quantum shot noise, because photons arrive at the sensor at random times governed by quantum mechanics. This page extracts those bits, cleans them with a Von Neumann extractor and a SHA-256 whitening pass, and certifies the output with the industry-standard <code>NIST SP 800-22</code> test suite. Every bit shown below was generated this way.
+  </p>
+
+  <section class="live">
+    <div class="live-head">
+      <div class="live-label">Live quantum bit stream</div>
+      <div class="live-status" id="live-status">connecting&hellip;</div>
+    </div>
+    <div class="bit-stream" id="bit-stream">&nbsp;</div>
+    <div class="live-meta" id="live-meta">&nbsp;</div>
+  </section>
+
+  <section class="fun">
+    <div class="fun-card">
+      <div class="fun-label">Quantum coin</div>
+      <div class="fun-value" id="coin-value">&mdash;</div>
+      <button class="fun-btn" id="coin-btn">Flip</button>
+    </div>
+    <div class="fun-card">
+      <div class="fun-label">Quantum die</div>
+      <div class="fun-value" id="dice-value">&mdash;</div>
+      <button class="fun-btn" id="dice-btn">Roll</button>
+    </div>
+    <div class="fun-card">
+      <div class="fun-label">Download bits</div>
+      <div class="fun-value small"><a href="#" id="download-link">256 fresh bits</a></div>
+      <button class="fun-btn" id="download-btn">Generate</button>
+    </div>
+  </section>
+
+  <section>
+    <h2>NIST SP 800-22 certification</h2>
+    <p class="dim">
+      The eight core tests from the NIST SP 800-22 statistical test suite, run against the latest batch of certified bits. A random source passes a test when the p-value is at least 0.01.
+    </p>
+    <table class="nist" id="nist-table">
+      <thead><tr><th>Test</th><th>p-value</th><th>Result</th></tr></thead>
+      <tbody id="nist-body"><tr><td colspan="3">Loading&hellip;</td></tr></tbody>
+    </table>
+    <div class="nist-meta" id="nist-meta">&nbsp;</div>
+  </section>
+
+  <section>
+    <h2>How this works</h2>
+    <p>
+      Light is made of photons. When photons arrive at a camera sensor, the exact number hitting each pixel in each frame is random — not because the camera is imprecise, but because photon arrival is fundamentally quantum. This random fluctuation, called <strong>shot noise</strong>, sits in the lowest bit of every pixel value. Scientific instruments like the ID Quantique Quantis use the same physics at the single-photon level; a webcam is a cruder version of the same idea.
+    </p>
+    <p>
+      The raw stream is extracted in three stages. First, the least-significant bit of every pixel across many frames is concatenated into a long bit stream. Second, a Von Neumann extractor removes any sensor bias by pairing consecutive bits and only emitting when they differ. Third, SHA-256 whitening compresses the result so any residual correlation between neighbouring pixels is destroyed. The output is then run through the NIST SP 800-22 battery for certification.
+    </p>
+  </section>
+
+  <section>
+    <h2>Honest caveats</h2>
+    <p class="dim">
+      A consumer webcam is not a scientific-grade single-photon detector. Some of the noise in each frame is ordinary electrical noise from the silicon sensor (thermal fluctuations, amplifier noise, ADC rounding) sitting alongside the real quantum shot noise. The output cannot be claimed as 100% quantum. What <em>can</em> be claimed is that the output passes the industry-standard NIST randomness test battery, and the underlying source includes a real, unavoidable quantum contribution that no amount of classical modelling could predict in advance.
+    </p>
+  </section>
+
+  <footer>
+    <div>Built by <a href="https://shreyas.uk">Shreyas Pavuluri</a></div>
+    <div>Source: <a href="https://github.com/Shreyas-Profile/quantum-random">github.com/Shreyas-Profile/quantum-random</a></div>
+  </footer>
+</main>
+<script src="script.js"></script>
+</body>
+</html>
