@@ -95,7 +95,7 @@ function renderNist() {
     <tr>
       <td>${x.test}</td>
       <td>${x.p_value.toFixed(4)}</td>
-      <td class="${x.passed ? 'result-pass' : 'result-fail'}">${x.passed ? 'PASS' : 'FAIL'}</td>
+      <td class="${x.passed ? 'result-pass' : 'result-fail'}">${x.passed ? 'PASSED' : 'FAILED'}</td>
     </tr>
   `).join('');
   meta.textContent = `${n.passed_count}/${n.total} tests passed on ${n.n_bits.toLocaleString()} certified bits`;
