@@ -23,7 +23,7 @@ async function load() {
     const r = await fetch('data.json', { cache: 'no-cache' });
     if (!r.ok) throw new Error(`HTTP ${r.status}`);
     DATA = await r.json();
-    statusEl.textContent = 'live • streaming';
+    statusEl.textContent = 'playing • certified random';
     statusEl.classList.remove('off');
     startStream();
     renderNist();

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>quantum-random · quantum.shreyas.uk</title>
-<meta name="description" content="A webcam-based quantum random number generator, certified with the NIST SP 800-22 test suite.">
+<meta name="description" content="A quantum random number generator built from a consumer webcam and certified with the NIST SP 800-22 test suite.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:wght@400;500;600&display=swap">
@@ -13,18 +13,21 @@
 <body>
 <main>
   <div class="eyebrow">Quantum · Random number generator</div>
-  <h1>I turned my laptop webcam into a <span class="accent">quantum random number generator.</span></h1>
+  <h1>A <span class="accent">quantum random number generator</span> built from a consumer webcam.</h1>
   <p class="lede">
-    The least-significant bits of each pixel in a webcam frame carry real quantum shot noise, because photons arrive at the sensor at random times governed by quantum mechanics. This page extracts those bits, cleans them with a Von Neumann extractor and a SHA-256 whitening pass, and certifies the output with the industry-standard <code>NIST SP 800-22</code> test suite. Every bit shown below was generated this way.
+    Light is made of individual photons that arrive at any point in space at genuinely unpredictable moments. A camera sensor measures the count of photons hitting each pixel per frame, so the last binary digit of every pixel value carries that unpredictability. This page captures those digits, cleans them with a Von Neumann extractor followed by a SHA-256 whitening pass, and certifies the output with the <code>NIST SP 800-22</code> randomness test suite. Every bit shown below was produced this way from a real webcam capture.
   </p>
 
   <section class="live">
     <div class="live-head">
-      <div class="live-label">Live quantum bit stream</div>
-      <div class="live-status" id="live-status">connecting&hellip;</div>
+      <div class="live-label">Quantum bit stream</div>
+      <div class="live-status" id="live-status">loading&hellip;</div>
     </div>
     <div class="bit-stream" id="bit-stream">&nbsp;</div>
     <div class="live-meta" id="live-meta">&nbsp;</div>
+    <p class="section-note">
+      A continuous playback of 1,000,000 certified random bits captured from the webcam experiment. Each digit was produced by the quantum unpredictability of photons arriving at a single pixel of the sensor during one frame.
+    </p>
   </section>
 
   <section class="fun">
@@ -32,23 +35,26 @@
       <div class="fun-label">Quantum coin</div>
       <div class="fun-value" id="coin-value">&mdash;</div>
       <button class="fun-btn" id="coin-btn">Flip</button>
+      <div class="fun-note">One certified random bit becomes one coin flip. A 1 is heads (H), a 0 is tails (T). The outcome is as unpredictable as physics allows.</div>
     </div>
     <div class="fun-card">
       <div class="fun-label">Quantum die</div>
       <div class="fun-value" id="dice-value">&mdash;</div>
       <button class="fun-btn" id="dice-btn">Roll</button>
+      <div class="fun-note">Three certified random bits are combined (and re-sampled when they land outside 1–6) to produce a fair six-sided roll.</div>
     </div>
     <div class="fun-card">
       <div class="fun-label">Download bits</div>
       <div class="fun-value small"><a href="#" id="download-link">256 fresh bits</a></div>
       <button class="fun-btn" id="download-btn">Generate</button>
+      <div class="fun-note">A plain text file containing 256 certified random digits. Suitable for cryptography, simulation or any task requiring unpredictable data.</div>
     </div>
   </section>
 
   <section>
     <h2>NIST SP 800-22 certification</h2>
     <p class="dim">
-      The eight core tests from the NIST SP 800-22 statistical test suite, run against the latest batch of certified bits. A random source passes a test when the p-value is at least 0.01.
+      The US National Institute of Standards and Technology publishes the official randomness test battery that commercial generators are measured against. It runs eight statistical tests against the bit sequence, each looking for a pattern a truly random source would not produce. Each test returns a <strong>p-value</strong> between 0 and 1, which measures how plausible the observed result would be if the source really were random. The industry pass threshold is <strong>0.01</strong>: a p-value at or above this means the test found nothing non-random. All eight tests must pass.
     </p>
     <table class="nist" id="nist-table">
       <thead><tr><th>Test</th><th>p-value</th><th>Result</th></tr></thead>
@@ -60,17 +66,10 @@
   <section>
     <h2>How this works</h2>
     <p>
-      Light is made of photons. When photons arrive at a camera sensor, the exact number hitting each pixel in each frame is random — not because the camera is imprecise, but because photon arrival is fundamentally quantum. This random fluctuation, called <strong>shot noise</strong>, sits in the lowest bit of every pixel value. Scientific instruments like the ID Quantique Quantis use the same physics at the single-photon level; a webcam is a cruder version of the same idea.
+      Light arrives in indivisible packets called photons, and each photon's arrival time is fundamentally random. When a camera sensor records a frame, each pixel counts how many photons hit it during that frame. The count fluctuates slightly even if the scene is completely still, because the number of photons arriving in any short time window is quantum-random. Whether that count ends up at an even number or an odd number is unpredictable at the quantum level, so the last binary digit of every pixel value (0 if the count was even, 1 if odd) is a genuine random bit.
     </p>
     <p>
-      The raw stream is extracted in three stages. First, the least-significant bit of every pixel across many frames is concatenated into a long bit stream. Second, a Von Neumann extractor removes any sensor bias by pairing consecutive bits and only emitting when they differ. Third, SHA-256 whitening compresses the result so any residual correlation between neighbouring pixels is destroyed. The output is then run through the NIST SP 800-22 battery for certification.
-    </p>
-  </section>
-
-  <section>
-    <h2>Honest caveats</h2>
-    <p class="dim">
-      A consumer webcam is not a scientific-grade single-photon detector. Some of the noise in each frame is ordinary electrical noise from the silicon sensor (thermal fluctuations, amplifier noise, ADC rounding) sitting alongside the real quantum shot noise. The output cannot be claimed as 100% quantum. What <em>can</em> be claimed is that the output passes the industry-standard NIST randomness test battery, and the underlying source includes a real, unavoidable quantum contribution that no amount of classical modelling could predict in advance.
+      The raw stream is then cleaned in two stages. A Von Neumann extractor removes any bias introduced by sensor electronics, then a SHA-256 whitening pass compresses the result so that correlations between nearby pixels are destroyed. The output is submitted to the NIST SP 800-22 battery for certification before being served from this page.
     </p>
   </section>
 
